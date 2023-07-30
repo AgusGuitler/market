@@ -1,32 +1,18 @@
 const express = require('express');
-const { faker } = require('@faker-js/faker');
+const UsersService = require('../services/users');
 
 const usersRouter = express.Router();
+const service = new UsersService();
 
 usersRouter.get('/', (req, res) => {
-  const users = [];
-
-  for ( let index = 0; index < 100; index++ ) {
-    users.push({
-      avatar: faker.image.avatar(),
-      birthday: faker.date.birthdate(),
-      email: faker.internet.email(),
-      firstName: faker.person.firstName(),
-      lastName: faker.person.lastName(),
-      sex: faker.person.sexType()
-    })
-  }
+  const users = service.find();
   res.json(users);
 })
 
 usersRouter.get('/:userId', (req, res) => {
   const { userId } = req.params;
-  const body = req.body;
-
-  res.status(200).json({
-    userId,
-    data: body,
-  })
+  const user = service.findOne(userId);
+  res.json(user);
 })
 
 usersRouter.post('/', (req, res) => {
