@@ -10,43 +10,36 @@ categoriesRouter.get('/', (req, res) => {
 })
 
 categoriesRouter.get('/:categoryId/products/:productId', (req, res) => {
-  const { categorieId, productId } = req.params;
+  const { categoryId, productId } = req.params;
   res.json({
-    categorieId,
+    categoryId,
     productId,
   })
 })
 
-categoriesRouter.get('/:categorieId', (req, res) => {
-  const { categorieId } = req.params;
-  const categorie = service.findOne(categorieId);
+categoriesRouter.get('/:categoryId', (req, res) => {
+  const { categoryId } = req.params;
+  const categorie = service.findOne(categoryId);
   res.json(categorie);
 })
 
 categoriesRouter.post('/', (req, res) => {
   const body = req.body;
-  res.status(201).json({
-    message: 'created',
-    data: body
-  });
+  const newCategory = service.create(body);
+  res.status(201).json(newCategory);
 })
 
 categoriesRouter.patch('/:id', (req, res) => {
   const { id } = req.params;
   const body = req.body;
-  res.status(202).json({
-    message: 'update',
-    data: body,
-    id,
-  });
+  const category = service.update(id, body)
+  res.status(202).json(category);
 })
 
 categoriesRouter.delete('/:id', (req, res) => {
   const { id } = req.params;
-  res.status(200).json({
-    message: 'deleted',
-    id,
-  });
+  const respuesta = service.delete(id);
+  res.status(200).json(respuesta);
 })
 
 module.exports = categoriesRouter;
