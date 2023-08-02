@@ -26,19 +26,14 @@ usersRouter.post('/', (req, res) => {
 usersRouter.patch('/:id', (req, res) => {
   const { id } = req.params;
   const body = req.body;
-  res.status(202).json({
-    message: 'update',
-    data: body,
-    id,
-  });
+  const user = service.update(id, body);
+  res.status(202).json(user);
 })
 
 usersRouter.delete('/:id', (req, res) => {
   const { id } = req.params;
-  res.status(200).json({
-    message: 'deleted',
-    id,
-  });
+  const respuesta = service.delete(id);
+  res.status(200).json(respuesta);
 })
 
 module.exports = usersRouter;
