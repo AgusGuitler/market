@@ -18,28 +18,21 @@ productsRouter.get('/:id', (req, res) =>  {
 
 productsRouter.post('/', (req, res) => {
   const body = req.body;
-  res.status(201).json({
-    message: 'created',
-    data: body
-  });
+  const newProduct = service.create(body);
+  res.status(201).json(newProduct);
 })
 
 productsRouter.patch('/:id', (req, res) => {
   const { id } = req.params;
   const body = req.body;
-  res.status(202).json({
-    message: 'update',
-    data: body,
-    id,
-  });
+  const product = service.update(id, body);
+  res.status(202).json(product);
 })
 
 productsRouter.delete('/:id', (req, res) => {
   const { id } = req.params;
-  res.status(200).json({
-    message: 'deleted',
-    id,
-  });
+  const respuesta = service.delete(id);
+  res.status(200).json(respuesta);
 })
 
 module.exports = productsRouter;
