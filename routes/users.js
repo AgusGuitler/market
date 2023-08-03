@@ -4,34 +4,52 @@ const UsersService = require('../services/users');
 const usersRouter = express.Router();
 const service = new UsersService();
 
-usersRouter.get('/', (req, res) => {
-  const users = service.find();
+usersRouter.get('/', async (req, res) => {
+  const users = await service.find();
   res.json(users);
 })
 
-usersRouter.get('/:userId', (req, res) => {
-  const { userId } = req.params;
-  const user = service.findOne(userId);
-  res.json(user);
+usersRouter.get('/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await service.findOne(userId);
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(404).json({
+      message: error.message
+    })
+  }
 })
 
-usersRouter.post('/', (req, res) => {
+usersRouter.post('/', async (req, res) => {
   const body = req.body;
-  const newUser = service.create(body);
+  const newUser = await service.create(body);
   res.status(201).json(newUser);
 })
 
-usersRouter.patch('/:id', (req, res) => {
-  const { id } = req.params;
-  const body = req.body;
-  const user = service.update(id, body);
-  res.status(202).json(user);
+usersRouter.patch('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const body = req.body;
+    const user = await service.update(id, body);
+    res.status(202).json(user);
+  } catch (error) {
+    res.status(404).json({
+      message: error.message
+    })
+  }
 })
 
-usersRouter.delete('/:id', (req, res) => {
-  const { id } = req.params;
-  const respuesta = service.delete(id);
-  res.status(200).json(respuesta);
+usersRouter.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const respuesta = await service.delete(id);
+    res.status(200).json(respuesta);
+  } catch (error) {
+    res.status(404).json({
+      message: error.message
+    })
+  }
 })
 
 module.exports = usersRouter;
