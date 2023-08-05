@@ -9,23 +9,13 @@ categoriesRouter.get('/', async (req, res) => {
   res.json(categories);
 })
 
-categoriesRouter.get('/:categoryId/products/:productId', (req, res) => {
-  const { categoryId, productId } = req.params;
-  res.json({
-    categoryId,
-    productId,
-  })
-})
-
-categoriesRouter.get('/:categoryId', async (req, res) => {
+categoriesRouter.get('/:categoryId', async (req, res, next) => {
   try {
     const { categoryId } = req.params;
     const category = await service.findOne(categoryId);
     res.status(200).json(category);
   } catch (error) {
-    res.status(404).json({
-      message: error.message
-    })
+    next(error)
   }
 })
 
@@ -35,28 +25,24 @@ categoriesRouter.post('/', async (req, res) => {
   res.status(201).json(newCategory);
 })
 
-categoriesRouter.patch('/:id', async (req, res) => {
+categoriesRouter.patch('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const body = req.body;
     const category = await service.update(id, body)
     res.status(202).json(category);
   } catch (error) {
-    res.status(404).json({
-      message: error.message
-    })
+    next(error)
   }
 })
 
-categoriesRouter.delete('/:id', async (req, res) => {
+categoriesRouter.delete('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const respuesta = await service.delete(id);
     res.status(200).json(respuesta);
   } catch (error) {
-    res.status(404).json({
-      message: error.message
-    })
+      next(error)
   }
 })
 

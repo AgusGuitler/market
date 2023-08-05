@@ -9,15 +9,13 @@ usersRouter.get('/', async (req, res) => {
   res.json(users);
 })
 
-usersRouter.get('/:userId', async (req, res) => {
+usersRouter.get('/:userId', async (req, res, next) => {
   try {
     const { userId } = req.params;
     const user = await service.findOne(userId);
     res.status(200).json(user);
   } catch (error) {
-    res.status(404).json({
-      message: error.message
-    })
+    next(error)
   }
 })
 
@@ -27,28 +25,24 @@ usersRouter.post('/', async (req, res) => {
   res.status(201).json(newUser);
 })
 
-usersRouter.patch('/:id', async (req, res) => {
+usersRouter.patch('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const body = req.body;
     const user = await service.update(id, body);
     res.status(202).json(user);
   } catch (error) {
-    res.status(404).json({
-      message: error.message
-    })
+    next(error)
   }
 })
 
-usersRouter.delete('/:id', async (req, res) => {
+usersRouter.delete('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const respuesta = await service.delete(id);
     res.status(200).json(respuesta);
   } catch (error) {
-    res.status(404).json({
-      message: error.message
-    })
+    next(error)
   }
 })
 
